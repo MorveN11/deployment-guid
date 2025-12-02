@@ -1,0 +1,67 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-and-deploy:
+    name: Build, Test, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install .NET dependencies
+        run: |
+          cd services/dotnet-products-api
+          dotnet restore
+
+      - name: Build .NET API
+        run: |
+          cd services/dotnet-products-api
+          dotnet build --configuration Release --no-restore
+
+      - name: Install Frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build Frontend
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Install EF Core Tools
+        run: dotnet tool install --global dotnet-ef --version 9.0.0
+
+      - name: Create EF Core Migration Bundle
+        run: |
+          cd services/dotnet-products-api
+          dotnet ef migrations bundle --configuration Release --no-build -f -o efbundle
+
+      - name: Run Database Migrations
+        run: |
+          cd services/dotnet-products-api
+          ./efbundle --connection "${{ secrets.DB_CONNECTION_STRING }}"
+        if: ${{ secrets.DB_CONNECTION_STRING != '' }}

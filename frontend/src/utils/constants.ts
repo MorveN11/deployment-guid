@@ -1,0 +1,4 @@
+const PRODUCTS_API = import.meta.env.VITE_PRODUCTS_API_URL
+const CATEGORIES_API = import.meta.env.VITE_CATEGORIES_API_URL
+
+export { PRODUCTS_API, CATEGORIES_API }

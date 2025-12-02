@@ -1,0 +1,50 @@
+services:
+  products-db:
+    image: postgres:17
+    container_name: deployment-guide.products-db
+    ports:
+      - '5432:5432'
+    networks:
+      - deployment-guide-network
+
+  products-api:
+    image: ${DOCKER_REGISTRY-}deployment-guide-products-api:dev
+    container_name: deployment-guide.products-api
+    build:
+      context: ./services/dotnet-products-api
+      dockerfile: Dockerfile
+    ports:
+      - '4001:8080'
+    depends_on:
+      - products-db
+    networks:
+      - deployment-guide-network
+
+  categories-api:
+    image: ${DOCKER_REGISTRY-}deployment-guide-categories-api:dev
+    container_name: deployment-guide.categories-api
+    build:
+      context: ./services/python-categories-api
+      dockerfile: Dockerfile
+    ports:
+      - '4002:8080'
+    networks:
+      - deployment-guide-network
+
+  frontend:
+    image: ${DOCKER_REGISTRY-}deployment-guide-frontend:dev
+    container_name: deployment-guide.frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:8080'
+    depends_on:
+      - products-api
+      - categories-api
+    networks:
+      - deployment-guide-network
+
+networks:
+  deployment-guide-network:
+    name: deployment-guide-network

@@ -1,0 +1,29 @@
+{
+  "name": "deployment-guide",
+  "version": "1.0.0",
+  "description": "Docker microservices deployment guide with .NET, Python FastAPI, and React",
+  "scripts": {
+    "compose": "docker compose up --build",
+    "compose:detached": "docker compose up --build -d",
+    "down": "docker compose down",
+    "down:volumes": "docker compose down -v",
+    "logs": "docker compose logs -f",
+    "logs:products": "docker compose logs -f products-api",
+    "logs:categories": "docker compose logs -f categories-api",
+    "logs:frontend": "docker compose logs -f frontend",
+    "ef:install": "dotnet tool install -g dotnet-ef --version 9.0.0",
+    "ef:bundle": "cd services/dotnet-products-api && dotnet ef migrations bundle --configuration Release -f -o efbundle",
+    "migrate": "./services/dotnet-products-api/efbundle --connection \"Host=localhost;Port=5432;Database=products-db;Username=postgres;Password=postgres\""
+  },
+  "keywords": [
+    "docker",
+    "microservices",
+    "dotnet",
+    "fastapi",
+    "react",
+    "vite",
+    "postgresql"
+  ],
+  "author": "",
+  "license": "MIT"
+}

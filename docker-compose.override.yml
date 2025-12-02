@@ -1,0 +1,29 @@
+services:
+  products-db:
+    environment:
+      - POSTGRES_DB=products-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432'
+    volumes:
+      - ./.containers/products-db-data:/var/lib/postgresql/data
+
+  products-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=products-db;Port=5432;Database=products-db;Username=postgres;Password=postgres
+    ports:
+      - '8080'
+
+  categories-api:
+    ports:
+      - '8080'
+
+  frontend:
+    build:
+      args:
+        VITE_PRODUCTS_API_URL: http://localhost:4001
+        VITE_CATEGORIES_API_URL: http://localhost:4002
+    ports:
+      - '8080'
