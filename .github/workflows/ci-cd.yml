@@ -1,4 +1,5 @@
 name: CI/CD Pipeline
+run-name: ${{ github.actor }}
 
 on:
   push:
@@ -7,7 +8,9 @@ on:
 
 permissions:
   contents: write
-  packages: write
+  issues: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   build-and-deploy:
