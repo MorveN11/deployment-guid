@@ -2,10 +2,10 @@
 node_modules/
 .env
 .DS_Store
-efbundle/
 bin/
 obj/
 .config/
+efbundle
 
 # Logs
 logs
