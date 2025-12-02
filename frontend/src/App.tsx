@@ -28,13 +28,13 @@ function App() {
 
         // Fetch products
         const productsResponse = await fetch(`${PRODUCTS_API}/api/products`)
-        if (!productsResponse.ok) throw new Error('Failed to fetch products')
+        if (!productsResponse.ok) throw new Error('Failed to fetch products api')
         const productsData = await productsResponse.json()
         setProducts(productsData)
 
         // Fetch categories
         const categoriesResponse = await fetch(`${CATEGORIES_API}/api/categories`)
-        if (!categoriesResponse.ok) throw new Error('Failed to fetch categories')
+        if (!categoriesResponse.ok) throw new Error('Failed to fetch categories api')
         const categoriesData = await categoriesResponse.json()
         setCategories(categoriesData)
 
