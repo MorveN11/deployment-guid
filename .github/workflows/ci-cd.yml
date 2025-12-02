@@ -67,4 +67,3 @@ jobs:
         run: |
           cd services/dotnet-products-api
           ./efbundle --connection "${{ secrets.DB_CONNECTION_STRING }}"
-        if: ${{ secrets.DB_CONNECTION_STRING != '' }}
